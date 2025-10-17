@@ -1,0 +1,2055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PickUp Go - Complete Feature Documentation Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 36px;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .stat-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            display: block;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            display: block;
+            font-size: 12px;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+        
+        .search-container {
+            margin: 30px 0;
+            position: relative;
+        }
+        
+        .search-wrapper {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        #searchInput {
+            flex: 1;
+            padding: 14px 18px;
+            font-size: 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+        
+        #searchInput:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .clear-btn {
+            padding: 10px 16px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .clear-btn:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+        
+        .clear-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .search-help {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-top: 8px;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .feature-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+            border-color: #667eea;
+        }
+        
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .feature-icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+        
+        .feature-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        
+        .feature-category {
+            display: inline-block;
+            background: #ecf0f1;
+            color: #667eea;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        
+        .feature-description {
+            color: #7f8c8d;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        #detailPanel {
+            position: static;
+            width: 100%;
+            height: auto;
+            background: white;
+            box-shadow: none;
+            overflow-y: auto;
+            transition: none;
+            z-index: 1000;
+            margin-top: 40px;
+            padding: 40px;
+            border: 2px solid #667eea;
+            border-radius: 16px;
+            display: none;
+        }
+        
+        #detailPanel.active {
+            display: block;
+        }
+        
+        .detail-header {
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: -40px -40px 40px -40px;
+            border-radius: 14px 14px 0 0;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .detail-header h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0;
+        }
+        
+        .close-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+        
+        .close-btn:hover {
+            background: rgba(255,255,255,0.4);
+            transform: rotate(90deg);
+        }
+        
+        .detail-content {
+            padding: 0;
+        }
+        
+        .detail-section {
+            margin-bottom: 35px;
+            padding-bottom: 35px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+        
+        .detail-section:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .detail-section h3 {
+            color: #667eea;
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .detail-section h3::before {
+            content: '';
+            width: 4px;
+            height: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 2px;
+        }
+        
+        .detail-section p {
+            color: #2c3e50;
+            line-height: 1.8;
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+        
+        .detail-section p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .info-list {
+            list-style: none;
+        }
+        
+        .info-list li {
+            color: #2c3e50;
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+            line-height: 1.7;
+            font-size: 15px;
+        }
+        
+        .info-list li::before {
+            content: '▸';
+            position: absolute;
+            left: 8px;
+            color: #667eea;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .location-tag, .related-tag, .keyword-tag {
+            display: inline-block;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .location-tag {
+            background: linear-gradient(135deg, #e8f4f8 0%, #d4e8f0 100%);
+            color: #0984e3;
+            border-left: 3px solid #0984e3;
+        }
+        
+        .location-tag:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(9, 132, 227, 0.2);
+        }
+        
+        .related-tag {
+            background: linear-gradient(135deg, #f0e8ff 0%, #e8d4ff 100%);
+            color: #6c5ce7;
+            border-left: 3px solid #6c5ce7;
+        }
+        
+        .related-tag:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(108, 92, 231, 0.2);
+        }
+        
+        .keyword-tag {
+            background: linear-gradient(135deg, #fffacd 0%, #fff8dc 100%);
+            color: #d4a017;
+            border-left: 3px solid #d4a017;
+        }
+        
+        .keyword-tag:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(212, 160, 23, 0.2);
+        }
+        
+        .section-divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #ecf0f1, transparent);
+            margin: 40px 0;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #7f8c8d;
+        }
+        
+        .no-results-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+        
+        .no-results h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            #detailPanel {
+                width: 100%;
+                right: -100%;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚕 PickUp Go</h1>
+            <p class="subtitle">Complete Feature Documentation Hub</p>
+            <div class="stats">
+                <div class="stat-box">
+                    <span class="stat-number">42+</span>
+                    <span class="stat-label">Features Documented</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number">500+</span>
+                    <span class="stat-label">Keywords Indexed</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number">Real-time</span>
+                    <span class="stat-label">Search</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="search-container">
+            <div class="search-wrapper">
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    placeholder="Search features... Try: 'new order', 'add driver', 'my trip', 'client profile', 'theme', 'login', or single words like 'trip', 'price', 'driver'"
+                />
+                <button class="clear-btn" id="clearBtn" disabled>Clear</button>
+            </div>
+            <div class="search-help">
+                💡 Tip: Search works with single words or phrases. Try "new order", "add driver", "my trip", "client profile", "theme", "login", etc.
+            </div>
+        </div>
+        
+        <div id="featuresContainer" class="features-grid"></div>
+    </div>
+    
+    <div id="detailPanel">
+        <div class="detail-header">
+            <h2 id="detailTitle"></h2>
+            <button class="close-btn" onclick="closeDetail()">✕</button>
+        </div>
+        <div id="detailContent" class="detail-content"></div>
+    </div>
+    
+    <script>
+        const features = [
+            // ==================== AUTHENTICATION & ACCOUNT ====================
+            {
+                id: 1,
+                icon: "🔑",
+                title: "Login",
+                category: "authentication",
+                keywords: "login sign in authentication account access email password",
+                whatItDoes: "User authentication system to access PickUp Go with email and password.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>Enter email address</li>
+                        <li>Enter password</li>
+                        <li>System validates credentials</li>
+                        <li>Access granted to dashboard if correct</li>
+                        <li>Error message if incorrect</li>
+                        <li>Remember me option available</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">First Screen > Login</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">Create Account</span>
+                    <span class="related-tag">Reset Password</span>
+                    <span class="related-tag">Logout</span>
+                `,
+                userScenario: "New driver opens app → Enters email and password → Clicks Login → Dashboard loads.",
+                howToTest: `
+                    <ol>
+                        <li>Open app without being logged in</li>
+                        <li>Enter valid email</li>
+                        <li>Enter valid password</li>
+                        <li>Click Login button</li>
+                        <li>Verify dashboard appears</li>
+                        <li>Try with incorrect password - verify error</li>
+                    </ol>
+                `
+            },
+            {
+                id: 2,
+                icon: "📝",
+                title: "Create Account",
+                category: "authentication",
+                keywords: "sign up register create account new account registration account creation",
+                whatItDoes: "Registration system for new drivers to create an account.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>Click Sign Up option</li>
+                        <li>Enter email address</li>
+                        <li>Create password (with strength requirements)</li>
+                        <li>Enter first and last name</li>
+                        <li>Accept Terms of Service</li>
+                        <li>Verify email address</li>
+                        <li>Account activated</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">Login Screen > Sign Up Link</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">Login</span>
+                    <span class="related-tag">Terms of Service</span>
+                `,
+                userScenario: "New driver wants to join → Clicks Sign Up → Enters email and password → Verifies email → Account created.",
+                howToTest: `
+                    <ol>
+                        <li>Go to Sign Up page</li>
+                        <li>Enter new email</li>
+                        <li>Create password</li>
+                        <li>Enter name</li>
+                        <li>Accept terms</li>
+                        <li>Verify verification email received</li>
+                        <li>Click verification link</li>
+                        <li>Try login with new account</li>
+                    </ol>
+                `
+            },
+            {
+                id: 3,
+                icon: "🚪",
+                title: "Logout",
+                category: "authentication",
+                keywords: "log out logout sign out exit session end",
+                whatItDoes: "Securely log out from the app and end the current session.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>Go to Settings</li>
+                        <li>Scroll to bottom</li>
+                        <li>Click Logout button</li>
+                        <li>Current session ends</li>
+                        <li>Returns to login screen</li>
+                        <li>Session data cleared</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">Settings > Bottom > Logout Button</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">Login</span>
+                    <span class="related-tag">Security</span>
+                `,
+                userScenario: "Driver finishes day → Goes to Settings → Clicks Logout → App returns to login screen.",
+                howToTest: `
+                    <ol>
+                        <li>Be logged into app</li>
+                        <li>Go to Settings</li>
+                        <li>Scroll to bottom</li>
+                        <li>Click Logout</li>
+                        <li>Verify login screen appears</li>
+                        <li>Try to access app - should redirect to login</li>
+                    </ol>
+                `
+            },
+            {
+                id: 4,
+                icon: "🗑️",
+                title: "Delete Account",
+                category: "authentication",
+                keywords: "delete account remove account deactivate account close account permanently delete",
+                whatItDoes: "Permanently delete user account and all associated data.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>Go to Settings > Security & Privacy</li>
+                        <li>Click Delete Account option</li>
+                        <li>System shows warning about permanent deletion</li>
+                        <li>User confirms deletion</li>
+                        <li>All data deleted permanently</li>
+                        <li>Account cannot be recovered</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">Settings > Security & Privacy > Delete Account</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">Security</span>
+                    <span class="related-tag">Privacy Policy</span>
+                `,
+                userScenario: "Driver decides to stop using app → Settings > Delete Account → Confirms → Account deleted.",
+                howToTest: `
+                    <ol>
+                        <li>Go to Settings</li>
+                        <li>Find Delete Account option</li>
+                        <li>Click delete</li>
+                        <li>Confirm warning dialog</li>
+                        <li>Verify account is deleted</li>
+                        <li>Try logging in - should fail</li>
+                    </ol>
+                `
+            },
+            
+            // ==================== USER PROFILE & ACCOUNT ====================
+            {
+                id: 5,
+                icon: "👤",
+                title: "My Profile",
+                category: "account",
+                keywords: "my profile driver profile profile settings personal info user profile edit profile",
+                whatItDoes: "View and edit driver's personal profile information.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>Go to Settings > My Profile</li>
+                        <li>View current profile information</li>
+                        <li>Edit first name, last name</li>
+                        <li>Update email address</li>
+                        <li>Change phone number</li>
+                        <li>Upload profile picture</li>
+                        <li>Save changes</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">Settings > Account > My Profile</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">My Company</span>
+                    <span class="related-tag">Reset Password</span>
+                `,
+                userScenario: "Driver wants to update phone number → Settings > My Profile → Edit phone → Save.",
+                howToTest: `
+                    <ol>
+                        <li>Go to Settings > My Profile</li>
+                        <li>View current info</li>
+                        <li>Edit a field</li>
+                        <li>Save changes</li>
+                        <li>Verify changes saved</li>
+                    </ol>
+                `
+            },
+            {
+                id: 6,
+                icon: "🏢",
+                title: "My Company",
+                category: "account",
+                keywords: "my company company profile company info company settings business info",
+                whatItDoes: "View and manage company information and settings.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>Go to Settings > My Company</li>
+                        <li>View company name</li>
+                        <li>Edit company details</li>
+                        <li>Update company address</li>
+                        <li>Set company email</li>
+                        <li>Upload company logo</li>
+                        <li>Save settings</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">Settings > Account > My Company</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">My Profile</span>
+                    <span class="related-tag">Drivers</span>
+                `,
+                userScenario: "Manager wants to update company logo → Settings > My Company → Upload logo → Save.",
+                howToTest: `
+                    <ol>
+                        <li>Go to Settings > My Company</li>
+                        <li>View company info</li>
+                        <li>Edit company name</li>
+                        <li>Save changes</li>
+                        <li>Verify changes persist</li>
+                    </ol>
+                `
+            },
+
+            // ==================== NEW ORDER MANAGEMENT ====================
+            {
+                id: 7,
+                icon: "📋",
+                title: "New Order",
+                category: "order",
+                keywords: "new order create order add order order creation start order step 1 client customer client info customer info",
+                whatItDoes: "Create a new transfer order with all details (client, passengers, addresses, pricing).",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>Click New Order button</li>
+                        <li>Step 1: Fill client information (flexible - optional fields)</li>
+                        <li>At least one client field required to proceed</li>
+                        <li>Step 2: Add passenger details</li>
+                        <li>Step 3: Select pickup and destination</li>
+                        <li>Step 4: Set date, time, vehicle type</li>
+                        <li>Step 5: Review and confirm order</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">Dashboard > New Order Button</span><span class="location-tag">Bottom Navigation</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">Client Profile</span>
+                    <span class="related-tag">Pricing Simulator</span>
+                    <span class="related-tag">My Trips</span>
+                `,
+                userScenario: "Driver receives call from client → Clicks New Order → Enters minimal info (name + phone) → Proceeds through steps → Creates order.",
+                howToTest: `
+                    <ol>
+                        <li>Click New Order</li>
+                        <li>Try to proceed with no fields filled - should show error</li>
+                        <li>Fill only name - should allow proceeding</li>
+                        <li>Fill multiple steps</li>
+                        <li>Complete order creation</li>
+                    </ol>
+                `
+            },
+            {
+                id: 8,
+                icon: "🎯",
+                title: "Pricing Simulator",
+                category: "pricing",
+                keywords: "pricing simulator price calculator estimate pricing quick order from price simulator create order from estimate",
+                whatItDoes: "Calculate trip pricing based on route, distance, and service type. Can create order directly from estimate.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>Click Pricing Simulator</li>
+                        <li>Enter pickup address</li>
+                        <li>Enter destination address</li>
+                        <li>Select service type (Standard, Premium, Luxe)</li>
+                        <li>System calculates price based on distance/zones</li>
+                        <li>Review estimated price</li>
+                        <li>Option: Click 'Create Order' button to turn estimate into actual order</li>
+                        <li>Avoids re-entering addresses if client agrees to price</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">Main Menu > Pricing Simulator</span><span class="location-tag">Dashboard</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">New Order</span>
+                    <span class="related-tag">Pricing Configuration</span>
+                `,
+                userScenario: "Driver on phone with client → Opens Pricing Simulator → Enters pickup/destination → Shows price €45 → Client says ok → Driver clicks 'Create Order' → Order created with addresses pre-filled.",
+                howToTest: `
+                    <ol>
+                        <li>Open Pricing Simulator</li>
+                        <li>Enter addresses</li>
+                        <li>Select service type</li>
+                        <li>Verify price calculated</li>
+                        <li>Click Create Order from Simulator</li>
+                        <li>Verify addresses pre-filled in new order</li>
+                    </ol>
+                `
+            },
+
+            // ==================== CLIENT MANAGEMENT ====================
+            {
+                id: 9,
+                icon: "👥",
+                title: "Client Profile",
+                category: "client",
+                keywords: "client profile customer profile add client manage client client info client details client information customer info customer details manage customer",
+                whatItDoes: "View, create, and manage individual client profiles with contact and address information.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>Go to Settings > Tools > Clients</li>
+                        <li>View list of all clients</li>
+                        <li>Click on client to view full profile</li>
+                        <li>Profile shows: name, email, phone, addresses, payment method</li>
+                        <li>Edit client details</li>
+                        <li>Add multiple addresses for client</li>
+                        <li>View trip history with this client</li>
+                        <li>Mark as favorite/frequent client</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">Settings > Tools > Clients</span><span class="location-tag">During New Order > Select Client</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">New Order</span>
+                    <span class="related-tag">Passenger Profile</span>
+                    <span class="related-tag">My Trips</span>
+                `,
+                userScenario: "Driver creates order and clicks 'Select Client' → Sees saved clients → Selects 'John Smith' → Profile loads with all saved info.",
+                howToTest: `
+                    <ol>
+                        <li>Go to Clients section</li>
+                        <li>View client list</li>
+                        <li>Click on a client</li>
+                        <li>View all profile details</li>
+                        <li>Edit client name</li>
+                        <li>Save changes</li>
+                        <li>View trip history</li>
+                    </ol>
+                `
+            },
+            {
+                id: 10,
+                icon: "🧑",
+                title: "Passenger Profile",
+                category: "client",
+                keywords: "passenger profile add passenger passenger info passenger details passenger management customer passenger passenger list",
+                whatItDoes: "Create and manage passenger profiles for people being transported.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>During order creation, can add passenger details</li>
+                        <li>Passenger can be same as client or different person</li>
+                        <li>Enter passenger name (first + last)</li>
+                        <li>Add phone number</li>
+                        <li>Add email (optional)</li>
+                        <li>Reuse previous passengers or create new</li>
+                        <li>Passenger info saved for future orders</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">New Order > Passenger Section > Add Passenger</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">New Order</span>
+                    <span class="related-tag">Client Profile</span>
+                `,
+                userScenario: "Creating order → Check 'Client is not a passenger' → Passenger section expands → Enter passenger name, email, phone → Save.",
+                howToTest: `
+                    <ol>
+                        <li>Create new order</li>
+                        <li>Uncheck 'Client is also passenger'</li>
+                        <li>Passenger fields should appear</li>
+                        <li>Enter passenger details</li>
+                        <li>Save order</li>
+                        <li>Verify passenger saved</li>
+                    </ol>
+                `
+            },
+            {
+                id: 11,
+                icon: "📞",
+                title: "Contact Icons (Call, Text, WhatsApp, Board)",
+                category: "communication",
+                keywords: "contact icons call text message whatsapp board display name phone icon communication button customer contact client contact",
+                whatItDoes: "Quick action buttons (Phone, SMS, WhatsApp, Board Display) next to client/passenger names for instant communication.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>Next to client/passenger name shows 4 icons:</li>
+                        <li>📞 Phone Icon - Click to call directly</li>
+                        <li>💬 SMS Icon - Click to send text message</li>
+                        <li>💚 WhatsApp Icon - Click to open WhatsApp chat</li>
+                        <li>📺 Board Icon - Click to display name fullscreen (airport waiting)</li>
+                        <li>Each icon opens relevant app or function</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">Trip Details > Client Section</span><span class="location-tag">Order Summary</span><span class="location-tag">Trip Details > Passenger Section</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">In-App Messaging</span>
+                    <span class="related-tag">Board Name Display</span>
+                `,
+                userScenario: "Driver arrives at pickup → Sees client name 'John Smith' with 4 icons below → Clicks WhatsApp icon → WhatsApp opens for quick message.",
+                howToTest: `
+                    <ol>
+                        <li>Open trip details with client</li>
+                        <li>Look for 4 contact icons</li>
+                        <li>Click phone icon - verify call initiates</li>
+                        <li>Click SMS icon - verify text opens</li>
+                        <li>Click WhatsApp - verify app opens</li>
+                        <li>Click board icon - name displays fullscreen</li>
+                    </ol>
+                `
+            },
+            {
+                id: 12,
+                icon: "📺",
+                title: "Board Name Display",
+                category: "communication",
+                keywords: "board display fullscreen name display airport waiting board hold name large screen show name customer name passenger name",
+                whatItDoes: "Display client/passenger name in large fullscreen format for waiting areas (airports, stations).",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>From trip details, click Board icon next to name</li>
+                        <li>Name displays in large, readable fullscreen format</li>
+                        <li>Perfect for holding up phone at airport pickup area</li>
+                        <li>Easy for passengers to spot driver</li>
+                        <li>Tapping anywhere closes fullscreen view</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">Trip Details > Board Icon next to Client Name</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">Contact Icons</span>
+                    <span class="related-tag">Client Profile</span>
+                `,
+                userScenario: "Driver arrives at airport for pickup → Clicks board icon → Large 'Smith' displays on phone screen → Passenger sees and recognizes driver.",
+                howToTest: `
+                    <ol>
+                        <li>Open trip with client</li>
+                        <li>Find board icon</li>
+                        <li>Click board display</li>
+                        <li>Verify name shows fullscreen in large text</li>
+                        <li>Tap to close</li>
+                    </ol>
+                `
+            },
+
+            // ==================== DRIVER MANAGEMENT ====================
+            {
+                id: 13,
+                icon: "🚗",
+                title: "Add Driver",
+                category: "driver",
+                keywords: "add driver new driver driver management manage drivers driver settings add new driver",
+                whatItDoes: "Add new drivers to the company account.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>Go to Settings > Features > Drivers</li>
+                        <li>Click Add Driver button</li>
+                        <li>Enter driver name</li>
+                        <li>Enter email address</li>
+                        <li>Set password</li>
+                        <li>Assign vehicles</li>
+                        <li>Configure permissions</li>
+                        <li>Save new driver</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">Settings > Features > Drivers > Add Button</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">Driver Management</span>
+                    <span class="related-tag">Manage Vehicles</span>
+                `,
+                userScenario: "Manager wants to add new driver → Settings > Drivers > Add Driver → Enters details → Driver account created.",
+                howToTest: `
+                    <ol>
+                        <li>Go to Drivers section</li>
+                        <li>Click Add Driver</li>
+                        <li>Fill all required fields</li>
+                        <li>Save driver</li>
+                        <li>Verify driver appears in list</li>
+                    </ol>
+                `
+            },
+            {
+                id: 14,
+                icon: "👥",
+                title: "Drivers Management",
+                category: "driver",
+                keywords: "drivers driver management manage drivers driver list driver settings edit driver delete driver",
+                whatItDoes: "View, edit, and manage all drivers in the system.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>Go to Settings > Features > Drivers</li>
+                        <li>View list of all drivers</li>
+                        <li>Click driver to view details</li>
+                        <li>Edit driver information</li>
+                        <li>Assign/remove vehicles</li>
+                        <li>Set working hours</li>
+                        <li>Enable/disable driver account</li>
+                        <li>View driver statistics</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">Settings > Features > Drivers</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">Add Driver</span>
+                    <span class="related-tag">Vehicles</span>
+                `,
+                userScenario: "Manager checks driver list → Clicks on 'Ahmed' → Edits his working hours → Saves.",
+                howToTest: `
+                    <ol>
+                        <li>Go to Drivers section</li>
+                        <li>View driver list</li>
+                        <li>Click on a driver</li>
+                        <li>Edit driver info</li>
+                        <li>Save changes</li>
+                    </ol>
+                `
+            },
+
+            // ==================== VEHICLE MANAGEMENT ====================
+            {
+                id: 15,
+                icon: "🚙",
+                title: "Add Vehicle",
+                category: "vehicle",
+                keywords: "add vehicle new vehicle vehicle management manage vehicles vehicle settings add car",
+                whatItDoes: "Add new vehicles to the company fleet.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>Go to Settings > Features > Vehicles</li>
+                        <li>Click Add Vehicle button</li>
+                        <li>Enter vehicle type (sedan, SUV, van, etc.)</li>
+                        <li>Enter license plate</li>
+                        <li>Add vehicle make/model</li>
+                        <li>Set capacity (passengers)</li>
+                        <li>Upload vehicle photo</li>
+                        <li>Assign to driver</li>
+                        <li>Save vehicle</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">Settings > Features > Vehicles > Add Button</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">Vehicles Management</span>
+                    <span class="related-tag">Add Driver</span>
+                `,
+                userScenario: "Manager buys new Mercedes → Settings > Vehicles > Add Vehicle → Enters details → Vehicle added to system.",
+                howToTest: `
+                    <ol>
+                        <li>Go to Vehicles section</li>
+                        <li>Click Add Vehicle</li>
+                        <li>Fill details</li>
+                        <li>Save vehicle</li>
+                        <li>Verify appears in vehicle list</li>
+                    </ol>
+                `
+            },
+            {
+                id: 16,
+                icon: "🚗",
+                title: "Vehicles Management",
+                category: "vehicle",
+                keywords: "vehicles vehicle management manage vehicles vehicle list edit vehicle delete vehicle maintenance",
+                whatItDoes: "View, edit, and manage all company vehicles.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>Go to Settings > Features > Vehicles</li>
+                        <li>View list of all vehicles</li>
+                        <li>Click vehicle to view details</li>
+                        <li>Edit vehicle information</li>
+                        <li>Update license plate</li>
+                        <li>Change vehicle photo</li>
+                        <li>Assign/unassign drivers</li>
+                        <li>Set vehicle availability</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">Settings > Features > Vehicles</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">Add Vehicle</span>
+                    <span class="related-tag">Drivers Management</span>
+                `,
+                userScenario: "Manager needs to update vehicle details → Vehicles > Select car → Edit info → Save.",
+                howToTest: `
+                    <ol>
+                        <li>Go to Vehicles section</li>
+                        <li>View vehicle list</li>
+                        <li>Click on a vehicle</li>
+                        <li>Edit details</li>
+                        <li>Save changes</li>
+                    </ol>
+                `
+            },
+
+            // ==================== GPS & NAVIGATION ====================
+            {
+                id: 17,
+                icon: "📍",
+                title: "GPS Integration",
+                category: "navigation",
+                keywords: "GPS navigation route maps destination driver location tappable address open maps directions",
+                whatItDoes: "Open any address in the preferred navigation/maps app for directions.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>Click on any address in app</li>
+                        <li>Address opens in preferred maps app (Google Maps, Apple Maps, etc.)</li>
+                        <li>Navigation starts to destination</li>
+                        <li>Driver sees turn-by-turn directions</li>
+                        <li>ETA displayed in maps app</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">Trip Details > Addresses</span><span class="location-tag">Any address field is tappable</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">Live Tracking</span>
+                    <span class="related-tag">Preferred GPS</span>
+                `,
+                userScenario: "Driver has order → Sees destination address → Taps address → Google Maps opens → Navigation starts.",
+                howToTest: `
+                    <ol>
+                        <li>Open trip with address</li>
+                        <li>Tap on address</li>
+                        <li>Verify maps app opens</li>
+                        <li>Verify destination shows correctly</li>
+                    </ol>
+                `
+            },
+            {
+                id: 18,
+                icon: "⚙️",
+                title: "Preferred GPS",
+                category: "settings",
+                keywords: "preferred GPS map app settings GPS preference navigation app choose GPS",
+                whatItDoes: "Set preferred maps/navigation app to open when clicking addresses.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>Go to Settings > Features > Preferred GPS</li>
+                        <li>Choose from available apps: Google Maps, Apple Maps, Waze, etc.</li>
+                        <li>Select your preference</li>
+                        <li>Save setting</li>
+                        <li>Addresses now open in your chosen app</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">Settings > Features > Preferred GPS</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">GPS Integration</span>
+                    <span class="related-tag">Live Tracking</span>
+                `,
+                userScenario: "Driver prefers Waze → Settings > Preferred GPS > Select Waze → Done.",
+                howToTest: `
+                    <ol>
+                        <li>Go to Preferred GPS settings</li>
+                        <li>Select different app</li>
+                        <li>Save</li>
+                        <li>Click address - verify correct app opens</li>
+                    </ol>
+                `
+            },
+            {
+                id: 19,
+                icon: "🔴",
+                title: "Live Tracking",
+                category: "navigation",
+                keywords: "live tracking real-time location driver tracking trip tracking ETA route tracking movement",
+                whatItDoes: "Show driver's real-time location and movement during active trips.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>During active trip, see driver's current location on map</li>
+                        <li>Location updates in real-time every few seconds</li>
+                        <li>Shows driver's route to pickup/destination</li>
+                        <li>Displays ETA (estimated time of arrival)</li>
+                        <li>Shows distance remaining</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">Trip Details > Live Map</span><span class="location-tag">Active Trips</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">GPS Integration</span>
+                    <span class="related-tag">Trip Details</span>
+                `,
+                userScenario: "Trip assigned → Open trip details → See live map with driver moving toward pickup → Watch ETA countdown.",
+                howToTest: `
+                    <ol>
+                        <li>Assign trip to driver with active GPS</li>
+                        <li>Open trip details</li>
+                        <li>View live map</li>
+                        <li>Verify location updates</li>
+                        <li>Check ETA displayed</li>
+                    </ol>
+                `
+            },
+
+            // ==================== PRICING & BILLING ====================
+            {
+                id: 20,
+                icon: "✈️",
+                title: "Flight Tracking",
+                category: "integration",
+                keywords: "flight tracking airport status delay on time late arrival departure flight number API",
+                whatItDoes: "Real-time flight status tracking for airport transfers, automatically updating trip details based on flight delays and arrivals.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>Enter flight number during order creation (Step 3/5)</li>
+                        <li>System queries flight tracking API automatically</li>
+                        <li>Shows flight status: On time, Delayed, Late tracking</li>
+                        <li>Displays departure and arrival times</li>
+                        <li>Shows flight route (e.g., CMB → KUL)</li>
+                        <li>Real-time updates on any delays or early arrivals</li>
+                        <li>Push notification when flight lands or changes status</li>
+                        <li>Helps drivers adjust pickup times automatically</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">New Order > Step 3 > Flight Number Field</span><span class="location-tag">Trip Details > Flight Tracking Section</span><span class="location-tag">Order Summary > Flight Status Display</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">New Order</span>
+                    <span class="related-tag">Live Tracking</span>
+                    <span class="related-tag">Notifications</span>
+                `,
+                userScenario: "Booking airport pickup → Enters flight number UL 236 → System tracks flight → Flight delayed 2 hours → Driver gets notification → Adjusts pickup time → Arrives when passenger actually lands.",
+                howToTest: `
+                    <ol>
+                        <li>Create order for airport transfer</li>
+                        <li>Enter valid flight number in Step 3</li>
+                        <li>Complete order and view Trip Details</li>
+                        <li>Verify flight tracking section shows flight info</li>
+                        <li>Check status displays (On time, Delayed, etc.)</li>
+                        <li>Verify departure/arrival times shown correctly</li>
+                        <li>Test notification triggers on flight delays</li>
+                    </ol>
+                `
+            },
+
+            // ==================== INTEGRATIONS ====================
+            {
+                id: 21,
+                icon: "🗺️",
+                title: "Google Maps Integration",
+                category: "integration",
+                keywords: "google maps address autocomplete address suggestions location search address input",
+                whatItDoes: "Google Maps API for real-time address autocomplete and suggestions when entering pickup/destination addresses.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>As you type in address fields, Google Maps suggestions appear</li>
+                        <li>Autocomplete suggests matching addresses</li>
+                        <li>Select suggestion to auto-fill complete address</li>
+                        <li>Works for both pickup and destination addresses</li>
+                        <li>Reduces typing errors</li>
+                        <li>Speeds up order creation</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">New Order > Pickup Address Field</span><span class="location-tag">New Order > Destination Address Field</span><span class="location-tag">Pricing Simulator > Address Fields</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">Michelin Integration</span>
+                    <span class="related-tag">GPS Integration</span>
+                    <span class="related-tag">New Order</span>
+                `,
+                userScenario: "Creating order → Type 'Paris A' → Google autocomplete suggests 'Paris Airport CDG' → Select it → Address auto-fills.",
+                howToTest: `
+                    <ol>
+                        <li>Go to New Order</li>
+                        <li>Start typing in address field</li>
+                        <li>Verify autocomplete suggestions appear</li>
+                        <li>Select an address suggestion</li>
+                        <li>Verify address completes automatically</li>
+                    </ol>
+                `
+            },
+            {
+                id: 22,
+                icon: "🛣️",
+                title: "Michelin Integration",
+                category: "integration",
+                keywords: "michelin API distance KM fuel consumption toll route time travel duration",
+                whatItDoes: "Michelin API integration for accurate distance, fuel consumption, toll costs, and estimated travel time calculations.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>After selecting addresses, Michelin API calculates:</li>
+                        <li>Distance in kilometers (KM)</li>
+                        <li>Fuel consumption for the route</li>
+                        <li>Toll fees (if applicable)</li>
+                        <li>Estimated travel time/duration</li>
+                        <li>Data used for pricing calculations</li>
+                        <li>Updated for each route</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">New Order > Cost Overview Section</span><span class="location-tag">Pricing Simulator > Results</span><span class="location-tag">Trip Details > Distance & Duration</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">Google Maps Integration</span>
+                    <span class="related-tag">Pricing Configuration</span>
+                    <span class="related-tag">New Order</span>
+                `,
+                userScenario: "Route calculated: Paris to Lyon → Michelin returns: 465 KM, 55 liters fuel, €28 tolls, 4 hours 45 min drive time → Pricing calculated based on these values.",
+                howToTest: `
+                    <ol>
+                        <li>Create new order</li>
+                        <li>Enter two addresses</li>
+                        <li>Verify distance shows in KM</li>
+                        <li>Check fuel consumption displays</li>
+                        <li>Verify toll information shown</li>
+                        <li>Check travel time/duration displayed</li>
+                        <li>Verify values used in pricing calculation</li>
+                    </ol>
+                `
+            },
+
+            // ==================== PRICING & BILLING ====================
+            {
+                id: 23,
+                icon: "💰",
+                title: "Pricing Configuration",
+                category: "pricing",
+                keywords: "pricing configuration set price pricing rules zone pricing distance pricing set pricing",
+                whatItDoes: "Configure pricing rules (zones, distance-based, fixed rates) for different service types.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>Go to Settings > Features > Pricing Configuration</li>
+                        <li>Set base prices for different service types</li>
+                        <li>Configure zone-based pricing</li>
+                        <li>Set distance-based pricing rules</li>
+                        <li>Add surcharges (peak hours, night, etc.)</li>
+                        <li>Set minimum/maximum fares</li>
+                        <li>Save configuration</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">Settings > Features > Pricing Configuration</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">Pricing Simulator</span>
+                    <span class="related-tag">Invoicing</span>
+                `,
+                userScenario: "Manager sets €2/km for Standard service → Saves → Pricing Simulator now uses new rates.",
+                howToTest: `
+                    <ol>
+                        <li>Go to Pricing Configuration</li>
+                        <li>Update pricing rules</li>
+                        <li>Save configuration</li>
+                        <li>Test in Pricing Simulator</li>
+                        <li>Verify new prices calculate correctly</li>
+                    </ol>
+                `
+            },
+            {
+                id: 24,
+                icon: "📄",
+                title: "Invoicing",
+                category: "billing",
+                keywords: "invoice generate invoice create invoice billing invoices send invoice PDF invoice auto-invoice",
+                whatItDoes: "Automatically generate and send professional invoices for completed trips.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>After trip completion, invoice generated automatically</li>
+                        <li>Invoice includes: trip details, distance, time, amount, date</li>
+                        <li>PDF format for easy sending to clients</li>
+                        <li>Can manually generate invoice from trip details</li>
+                        <li>Option to send invoice via email to client</li>
+                        <li>Invoice number auto-generated and unique</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">Trip Details > Generate Invoice</span><span class="location-tag">Completed Trips > Invoice Option</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">Estimate</span>
+                    <span class="related-tag">Projects (Group Invoicing)</span>
+                `,
+                userScenario: "Trip completed → Open trip details → Click Generate Invoice → Download PDF → Email to client.",
+                howToTest: `
+                    <ol>
+                        <li>Complete a trip</li>
+                        <li>Go to trip details</li>
+                        <li>Click Generate Invoice</li>
+                        <li>Verify invoice shows correct details</li>
+                        <li>Download as PDF</li>
+                        <li>Test email delivery</li>
+                    </ol>
+                `
+            },
+            {
+                id: 25,
+                icon: "📊",
+                title: "Estimate (Quote)",
+                category: "billing",
+                keywords: "estimate quote pricing estimate generate quote send estimate price quote proposal",
+                whatItDoes: "Generate price estimates/quotes for clients before completing orders.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>Use Pricing Simulator to generate estimate</li>
+                        <li>Or generate from trip details before completion</li>
+                        <li>Shows detailed breakdown: distance, time, rate, total</li>
+                        <li>PDF format for sharing with clients</li>
+                        <li>Can email estimate to client</li>
+                        <li>Client can confirm before booking</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">Pricing Simulator</span><span class="location-tag">Trip Details > Generate Estimate</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">Pricing Simulator</span>
+                    <span class="related-tag">Invoicing</span>
+                `,
+                userScenario: "Client requests quote → Use Pricing Simulator → Generate estimate → Email to client → Client approves → Create order.",
+                howToTest: `
+                    <ol>
+                        <li>Go to Pricing Simulator</li>
+                        <li>Generate price estimate</li>
+                        <li>Verify details correct</li>
+                        <li>Download as PDF</li>
+                        <li>Test email option</li>
+                    </ol>
+                `
+            },
+
+            // ==================== TRIP & ORDER HISTORY ====================
+            {
+                id: 26,
+                icon: "📱",
+                title: "My Trips",
+                category: "trip",
+                keywords: "my trips trip history current trips past trips active trips completed trips trip list trip archive",
+                whatItDoes: "View all current and past trips/orders with history and details.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>Go to My Trips section</li>
+                        <li>See current/active trips at top</li>
+                        <li>Scroll to see past trips below</li>
+                        <li>Click any trip to view full details</li>
+                        <li>See trip status (pending, completed, cancelled)</li>
+                        <li>Access trip invoice/details</li>
+                        <li>Filter by date or status</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">Main Menu > My Trips</span><span class="location-tag">Dashboard</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">New Order</span>
+                    <span class="related-tag">Trip Details</span>
+                    <span class="related-tag">Performance Dashboard</span>
+                `,
+                userScenario: "Driver checks My Trips → Sees 2 current trips and 15 completed trips from today → Clicks on a past trip to see invoice.",
+                howToTest: `
+                    <ol>
+                        <li>Go to My Trips</li>
+                        <li>View current trips</li>
+                        <li>View past trips</li>
+                        <li>Click on a trip</li>
+                        <li>View full trip details</li>
+                    </ol>
+                `
+            },
+            {
+                id: 27,
+                icon: "📜",
+                title: "Mission History (Trip Archive)",
+                category: "trip",
+                keywords: "mission history trip archive past trips completed missions trip records history archive",
+                whatItDoes: "View detailed archive and history of all past completed missions/trips.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>Access from My Trips section</li>
+                        <li>See all completed trips organized by date</li>
+                        <li>View trip summary: client, route, earnings</li>
+                        <li>Click trip for detailed information</li>
+                        <li>Access invoice from history</li>
+                        <li>Filter by date range or client</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">My Trips > Past Trips Tab</span><span class="location-tag">Trip Archive</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">My Trips</span>
+                    <span class="related-tag">Performance Dashboard</span>
+                `,
+                userScenario: "Driver wants to see what they earned last month → Goes to Mission History → Filters by date → Sees all trips with total earnings.",
+                howToTest: `
+                    <ol>
+                        <li>Go to Trip Archive/History</li>
+                        <li>View past completed trips</li>
+                        <li>Filter by date</li>
+                        <li>Click trip to see details</li>
+                    </ol>
+                `
+            },
+
+            // ==================== PERFORMANCE & ANALYTICS ====================
+            {
+                id: 28,
+                icon: "📈",
+                title: "Performance Dashboard",
+                category: "analytics",
+                keywords: "performance dashboard analytics statistics earnings total income trips completed kilometers distance",
+                whatItDoes: "View comprehensive performance metrics: earnings, trips, distance, ratings, and efficiency stats.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>Go to Settings > Tools > Performance</li>
+                        <li>View total income (today, week, month)</li>
+                        <li>See number of trips completed</li>
+                        <li>Total kilometers driven</li>
+                        <li>Average earnings per trip</li>
+                        <li>View average rating from clients</li>
+                        <li>Charts showing trends over time</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">Settings > Tools > Performance</span><span class="location-tag">Dashboard</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">My Trips</span>
+                    <span class="related-tag">Ratings & Reviews</span>
+                `,
+                userScenario: "Driver wants to check monthly earnings → Performance Dashboard → Shows €2,450 this month from 145 trips.",
+                howToTest: `
+                    <ol>
+                        <li>Go to Performance section</li>
+                        <li>View all metrics</li>
+                        <li>Check earnings calculated correctly</li>
+                        <li>Verify trip count matches</li>
+                    </ol>
+                `
+            },
+            {
+                id: 29,
+                icon: "⭐",
+                title: "Ratings & Reviews",
+                category: "analytics",
+                keywords: "ratings reviews client ratings rating system feedback stars customer feedback testimonials",
+                whatItDoes: "View client ratings and reviews for your service quality.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>After trip completion, client can rate driver</li>
+                        <li>Rating scale: 1-5 stars</li>
+                        <li>Optionally include written review</li>
+                        <li>View all your ratings in Performance section</li>
+                        <li>See average rating across all trips</li>
+                        <li>Read individual client comments</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">Performance Dashboard > Ratings</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">Performance Dashboard</span>
+                    <span class="related-tag">Trip Details</span>
+                `,
+                userScenario: "Driver completes trip → Client rates 5 stars → Driver can see rating in Performance Dashboard.",
+                howToTest: `
+                    <ol>
+                        <li>Go to Performance section</li>
+                        <li>View ratings received</li>
+                        <li>Read client reviews</li>
+                        <li>Check average rating</li>
+                    </ol>
+                `
+            },
+
+            // ==================== INTEGRATION ====================
+            {
+                id: 30,
+                icon: "🔗",
+                title: "Connect Platforms",
+                category: "integration",
+                keywords: "connect platforms integration external platforms Uber Bolt Lyft Grab income import multi-platform",
+                whatItDoes: "Connect external platforms (Uber, Bolt, Lyft, Grab, etc.) to import income data.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>Go to Settings > Features > Connect Platforms</li>
+                        <li>Select platform to connect (Uber, Bolt, Lyft, etc.)</li>
+                        <li>Authorize app to access platform account</li>
+                        <li>Platform income automatically imports</li>
+                        <li>Real-time sync with platform</li>
+                        <li>View combined income from all platforms</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">Settings > Features > Connect Platforms</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">Performance Dashboard</span>
+                    <span class="related-tag">Analytics</span>
+                `,
+                userScenario: "Driver works on Uber and Bolt → Connects both to PickUp Go → Income from both automatically shows in dashboard.",
+                howToTest: `
+                    <ol>
+                        <li>Go to Connect Platforms</li>
+                        <li>Select Uber</li>
+                        <li>Authorize connection</li>
+                        <li>Verify income synced</li>
+                        <li>Connect second platform</li>
+                        <li>Verify combined earnings show</li>
+                    </ol>
+                `
+            },
+
+            // ==================== SETTINGS & PREFERENCES ====================
+            {
+                id: 31,
+                icon: "🌐",
+                title: "Languages",
+                category: "settings",
+                keywords: "languages language settings choose language multi-language localization translation",
+                whatItDoes: "Change app language to your preferred language.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>Go to Settings > Settings & Preferences > Languages</li>
+                        <li>See list of available languages</li>
+                        <li>Select your language</li>
+                        <li>App interface changes to selected language</li>
+                        <li>Language preference saved</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">Settings > Settings & Preferences > Languages</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">Currency</span>
+                    <span class="related-tag">Theme</span>
+                `,
+                userScenario: "French user wants app in French → Settings > Languages > Select Français → App now in French.",
+                howToTest: `
+                    <ol>
+                        <li>Go to Languages setting</li>
+                        <li>Select different language</li>
+                        <li>Verify interface changes language</li>
+                        <li>Change back to original</li>
+                    </ol>
+                `
+            },
+            {
+                id: 32,
+                icon: "💱",
+                title: "Currency",
+                category: "settings",
+                keywords: "currency money symbol price display euro dollar pounds currency settings change currency",
+                whatItDoes: "Set preferred currency for displaying prices and earnings.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>Go to Settings > Settings & Preferences > Currency</li>
+                        <li>Choose from available currencies (€, $, £, etc.)</li>
+                        <li>Select your currency</li>
+                        <li>All prices now display in selected currency</li>
+                        <li>Earnings show in chosen currency</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">Settings > Settings & Preferences > Currency</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">Languages</span>
+                    <span class="related-tag">Performance Dashboard</span>
+                `,
+                userScenario: "French driver wants to see prices in euros → Settings > Currency > Select € → All prices show in euros.",
+                howToTest: `
+                    <ol>
+                        <li>Go to Currency setting</li>
+                        <li>Change currency</li>
+                        <li>Verify all prices update</li>
+                        <li>Check dashboard currency</li>
+                    </ol>
+                `
+            },
+            {
+                id: 33,
+                icon: "🔔",
+                title: "Notifications",
+                category: "settings",
+                keywords: "notifications notification settings alerts push notifications email notifications manage notifications",
+                whatItDoes: "Manage notification preferences for orders, messages, and updates.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>Go to Settings > Settings & Preferences > Notifications</li>
+                        <li>Enable/disable different notification types</li>
+                        <li>Push notifications for new orders</li>
+                        <li>Message notifications</li>
+                        <li>Email notifications</li>
+                        <li>Quiet hours settings</li>
+                        <li>Save preferences</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">Settings > Settings & Preferences > Notifications</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">In-App Messaging</span>
+                    <span class="related-tag">New Order</span>
+                `,
+                userScenario: "Driver wants to disable notifications after 10 PM → Settings > Notifications > Set quiet hours → Notifications pause at 10 PM.",
+                howToTest: `
+                    <ol>
+                        <li>Go to Notifications setting</li>
+                        <li>Enable/disable different types</li>
+                        <li>Set quiet hours</li>
+                        <li>Save settings</li>
+                        <li>Verify notifications work per settings</li>
+                    </ol>
+                `
+            },
+            {
+                id: 34,
+                icon: "📧",
+                title: "Email Integration",
+                category: "settings",
+                keywords: "email integration email settings email address send emails email notifications email delivery",
+                whatItDoes: "Configure email settings for invoice delivery and notifications.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>Go to Settings > Settings & Preferences > Email Integration</li>
+                        <li>Add/verify email address</li>
+                        <li>Enable email notifications</li>
+                        <li>Configure email for invoice delivery</li>
+                        <li>Test email delivery</li>
+                        <li>Save settings</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">Settings > Settings & Preferences > Email Integration</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">Invoicing</span>
+                    <span class="related-tag">Notifications</span>
+                `,
+                userScenario: "Driver adds email to receive daily summary → Settings > Email Integration > Add email → Receives daily report emails.",
+                howToTest: `
+                    <ol>
+                        <li>Go to Email Integration</li>
+                        <li>Add email address</li>
+                        <li>Enable email notifications</li>
+                        <li>Test email delivery</li>
+                    </ol>
+                `
+            },
+            {
+                id: 32,
+                icon: "🌙",
+                title: "Theme",
+                category: "settings",
+                keywords: "theme dark mode light mode system appearance light dark theme change theme appearance",
+                whatItDoes: "Switch between Light, Dark, or System theme for app appearance.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>Go to Settings > Settings & Preferences > Theme</li>
+                        <li>Three options available:</li>
+                        <li>Light - Always use light theme (white background)</li>
+                        <li>Dark - Always use dark theme (black background)</li>
+                        <li>System - Follow device system settings</li>
+                        <li>Select preference</li>
+                        <li>App appearance changes immediately</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">Settings > Settings & Preferences > Theme</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">Languages</span>
+                    <span class="related-tag">Notifications</span>
+                `,
+                userScenario: "Driver prefers dark mode for night driving → Settings > Theme > Select Dark → App switches to dark theme.",
+                howToTest: `
+                    <ol>
+                        <li>Go to Theme setting</li>
+                        <li>Select Light theme</li>
+                        <li>Verify app is light</li>
+                        <li>Select Dark theme</li>
+                        <li>Verify app is dark</li>
+                        <li>Select System theme</li>
+                    </ol>
+                `
+            },
+
+            // ==================== SECURITY ====================
+            {
+                id: 35,
+                icon: "🔐",
+                title: "Face ID / Biometric",
+                category: "security",
+                keywords: "face ID biometric fingerprint authentication secure login biometric security",
+                whatItDoes: "Use Face ID or fingerprint for quick and secure app login.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>Go to Settings > Security & Privacy > Face ID</li>
+                        <li>Enable Face ID option</li>
+                        <li>Follow setup process</li>
+                        <li>Next login, use Face ID instead of password</li>
+                        <li>Faster and more secure access</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">Settings > Security & Privacy > Face ID</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">Reset Password</span>
+                    <span class="related-tag">Login</span>
+                `,
+                userScenario: "Driver enables Face ID → Next time opens app → Scans face → Instantly logged in without typing password.",
+                howToTest: `
+                    <ol>
+                        <li>Go to Face ID setting</li>
+                        <li>Enable and setup</li>
+                        <li>Log out</li>
+                        <li>Try Face ID login</li>
+                        <li>Verify works correctly</li>
+                    </ol>
+                `
+            },
+            {
+                id: 36,
+                icon: "🔑",
+                title: "Reset Password",
+                category: "security",
+                keywords: "reset password change password forgot password update password new password",
+                whatItDoes: "Change or reset your account password.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>Go to Settings > Security & Privacy > Reset Password</li>
+                        <li>Enter current password</li>
+                        <li>Enter new password (with strength requirements)</li>
+                        <li>Confirm new password</li>
+                        <li>Save changes</li>
+                        <li>Use new password on next login</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">Settings > Security & Privacy > Reset Password</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">Login</span>
+                    <span class="related-tag">Face ID</span>
+                `,
+                userScenario: "Driver wants stronger password → Settings > Reset Password → Enters current password → Sets new strong password.",
+                howToTest: `
+                    <ol>
+                        <li>Go to Reset Password</li>
+                        <li>Enter current password</li>
+                        <li>Create new password</li>
+                        <li>Confirm new password</li>
+                        <li>Save</li>
+                        <li>Log out and try new password</li>
+                    </ol>
+                `
+            },
+            {
+                id: 35,
+                icon: "📋",
+                title: "Terms of Service",
+                category: "legal",
+                keywords: "terms of service terms conditions legal agreement ToS service terms",
+                whatItDoes: "View the Terms of Service agreement.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>Go to Settings > Security & Privacy > Terms of Service</li>
+                        <li>Read full terms</li>
+                        <li>Review service conditions</li>
+                        <li>Understand user responsibilities</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">Settings > Security & Privacy > Terms of Service</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">Privacy Policy</span>
+                `,
+                userScenario: "User wants to read service terms → Settings > Terms of Service → Reviews full agreement.",
+                howToTest: `
+                    <ol>
+                        <li>Go to Terms of Service</li>
+                        <li>Verify document opens</li>
+                        <li>Can read and scroll through</li>
+                    </ol>
+                `
+            },
+            {
+                id: 36,
+                icon: "🔒",
+                title: "Privacy Policy",
+                category: "legal",
+                keywords: "privacy policy data privacy privacy settings personal data protection GDPR privacy",
+                whatItDoes: "View the Privacy Policy regarding data usage and protection.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>Go to Settings > Security & Privacy > Privacy Policy</li>
+                        <li>Read privacy terms</li>
+                        <li>Learn how data is protected</li>
+                        <li>Understand data usage</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">Settings > Security & Privacy > Privacy Policy</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">Terms of Service</span>
+                `,
+                userScenario: "User concerned about privacy → Settings > Privacy Policy → Reviews data protection measures.",
+                howToTest: `
+                    <ol>
+                        <li>Go to Privacy Policy</li>
+                        <li>Verify document opens</li>
+                        <li>Can read content</li>
+                    </ol>
+                `
+            },
+
+            // ==================== PROJECTS & TOOLS ====================
+            {
+                id: 37,
+                icon: "📂",
+                title: "Projects",
+                category: "tools",
+                keywords: "projects group trips multiple trips project invoicing grouped invoicing related orders",
+                whatItDoes: "Group multiple related trips/orders under one project for grouped invoicing.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>Go to Settings > Tools > Projects</li>
+                        <li>Create new project (e.g., 'Company Conference - Transport')</li>
+                        <li>Add multiple trips/orders to project</li>
+                        <li>System groups all related orders</li>
+                        <li>Generate single invoice for all trips in project</li>
+                        <li>Easier billing for bulk assignments</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">Settings > Tools > Projects</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">Invoicing</span>
+                    <span class="related-tag">New Order</span>
+                `,
+                userScenario: "Company needs 5 transfers for conference → Create Project 'Conference Transfers' → Add all 5 trips → Generate one invoice.",
+                howToTest: `
+                    <ol>
+                        <li>Go to Projects</li>
+                        <li>Create new project</li>
+                        <li>Add multiple trips</li>
+                        <li>Generate grouped invoice</li>
+                        <li>Verify all trips included</li>
+                    </ol>
+                `
+            },
+            {
+                id: 38,
+                icon: "🌍",
+                title: "Country Flag Display",
+                category: "features",
+                keywords: "country flag flag display country code international calls country selector",
+                whatItDoes: "Display country flags next to phone numbers for international context.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>Phone numbers show country flag automatically</li>
+                        <li>Flag indicates phone number country code</li>
+                        <li>Helpful for international trips</li>
+                        <li>Quick visual reference for country</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">Client Profile > Phone</span><span class="location-tag">Passenger Details > Phone</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">Contact Icons</span>
+                    <span class="related-tag">Client Profile</span>
+                `,
+                userScenario: "Passenger from Germany → Phone shows 🇩🇪 flag + number → Driver knows international number.",
+                howToTest: `
+                    <ol>
+                        <li>Add client with international phone</li>
+                        <li>View client profile</li>
+                        <li>Verify flag displays next to phone</li>
+                    </ol>
+                `
+            },
+
+            // ==================== HELP & SUPPORT ====================
+            {
+                id: 39,
+                icon: "❓",
+                title: "Help & Support",
+                category: "support",
+                keywords: "help support contact support customer support tutorial support guide help center FAQ",
+                whatItDoes: "Access help resources, tutorials, and customer support.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>Go to Settings > Help & Feedback</li>
+                        <li>Support - Contact support team</li>
+                        <li>Tutorial - Watch app tutorials</li>
+                        <li>Rate us - Share feedback about app</li>
+                        <li>Invite friends - Refer other drivers</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">Settings > Help & Feedback</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">Feedback</span>
+                    <span class="related-tag">Tutorial</span>
+                `,
+                userScenario: "New driver confused about feature → Settings > Help > Support → Can contact support team.",
+                howToTest: `
+                    <ol>
+                        <li>Go to Help & Support</li>
+                        <li>Find contact support option</li>
+                        <li>View tutorials available</li>
+                    </ol>
+                `
+            },
+            {
+                id: 40,
+                icon: "📚",
+                title: "Tutorial",
+                category: "support",
+                keywords: "tutorial guide how to learn app onboarding training video tutorial walkthrough",
+                whatItDoes: "Interactive tutorials and guides for using PickUp Go.",
+                howItWorks: `
+                    <ul class="info-list">
+                        <li>Go to Settings > Help & Feedback > Tutorial</li>
+                        <li>Choose tutorial topic</li>
+                        <li>Follow step-by-step instructions</li>
+                        <li>Video demonstrations available</li>
+                        <li>Learn app features quickly</li>
+                    </ul>
+                `,
+                whereToFind: `<span class="location-tag">Settings > Help & Feedback > Tutorial</span>`,
+                relatedFeatures: `
+                    <span class="related-tag">Help & Support</span>
+                `,
+                userScenario: "New driver wants to learn app → Settings > Tutorial > Watches 'How to Create Order' → Learns feature in 2 minutes.",
+                howToTest: `
+                    <ol>
+                        <li>Go to Tutorials</li>
+                        <li>Select a tutorial</li>
+                        <li>Follow through content</li>
+                        <li>Verify instructions clear</li>
+                    </ol>
+                `
+            }
+        ];
+
+        let currentFeature = null;
+        const searchInput = document.getElementById('searchInput');
+        const clearBtn = document.getElementById('clearBtn');
+        const featuresContainer = document.getElementById('featuresContainer');
+
+        function renderFeatures(featuresToRender) {
+            if (featuresToRender.length === 0) {
+                featuresContainer.innerHTML = `
+                    <div class="no-results" style="grid-column: 1/-1;">
+                        <div class="no-results-icon">🔍</div>
+                        <h3>No Features Found</h3>
+                        <p>Try searching with different keywords like: "new order", "add driver", "my trip", "client profile", "theme", or "login"</p>
+                    </div>
+                `;
+                return;
+            }
+
+            featuresContainer.innerHTML = featuresToRender.map(feature => `
+                <div class="feature-card" onclick="showDetail(${feature.id})">
+                    <div class="feature-icon">${feature.icon}</div>
+                    <div class="feature-category">${feature.category.toUpperCase()}</div>
+                    <div class="feature-title">${feature.title}</div>
+                    <div class="feature-description">${feature.whatItDoes}</div>
+                </div>
+            `).join('');
+        }
+
+        function showDetail(id) {
+            currentFeature = features.find(f => f.id === id);
+            if (!currentFeature) return;
+
+            document.getElementById('detailTitle').textContent = `${currentFeature.icon} ${currentFeature.title}`;
+            document.getElementById('detailContent').innerHTML = `
+                <div class="detail-section">
+                    <h3>What it does</h3>
+                    <p>${currentFeature.whatItDoes}</p>
+                </div>
+                <div class="detail-section">
+                    <h3>How it works</h3>
+                    <div>${currentFeature.howItWorks}</div>
+                </div>
+                <div class="detail-section">
+                    <h3>Where to find</h3>
+                    <div>${currentFeature.whereToFind}</div>
+                </div>
+                <div class="detail-section">
+                    <h3>Related features</h3>
+                    <div>${currentFeature.relatedFeatures}</div>
+                </div>
+                <div class="detail-section">
+                    <h3>User scenario</h3>
+                    <p>${currentFeature.userScenario}</p>
+                </div>
+                <div class="detail-section">
+                    <h3>How to test</h3>
+                    <div>${currentFeature.howToTest}</div>
+                </div>
+                <div class="detail-section">
+                    <h3>Keywords</h3>
+                    <div>${currentFeature.keywords.split(', ').map(k => `<span class="keyword-tag">${k}</span>`).join('')}</div>
+                </div>
+            `;
+
+            document.getElementById('detailPanel').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            // Scroll to detail panel
+            setTimeout(() => {
+                document.getElementById('detailPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                document.body.style.overflow = 'auto';
+            }, 100);
+        }
+
+        function closeDetail() {
+            document.getElementById('detailPanel').classList.remove('active');
+            document.body.style.overflow = 'auto';
+            currentFeature = null;
+        }
+
+        function searchFeatures() {
+            const query = searchInput.value.toLowerCase().trim();
+
+            if (query === '') {
+                renderFeatures(features);
+                clearBtn.disabled = true;
+                return;
+            }
+
+            clearBtn.disabled = false;
+
+            // Split query into individual words
+            const queryWords = query.split(/\s+/);
+
+            const results = features.filter(feature => {
+                const searchableText = `${feature.title} ${feature.keywords} ${feature.whatItDoes} ${feature.category}`.toLowerCase();
+                
+                // Match if ANY word in query matches ANY part of the searchable text
+                return queryWords.some(word => searchableText.includes(word));
+            });
+
+            renderFeatures(results);
+        }
+
+        clearBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            clearBtn.disabled = true;
+            renderFeatures(features);
+            searchInput.focus();
+        });
+
+        searchInput.addEventListener('input', searchFeatures);
+        searchInput.addEventListener('keyup', searchFeatures);
+
+        // Close detail panel when clicking outside
+        document.addEventListener('click', (e) => {
+            if (e.target.id === 'detailPanel') {
+                closeDetail();
+            }
+        });
+
+        // Initial render
+        renderFeatures(features);
+    </script>
+</body>
+</html>
